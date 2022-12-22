@@ -233,7 +233,7 @@ if __name__ == '__main__':
 
     # create figure that shows the results in the solution space
     markers = ['x', 'v', '1', 's', '+']
-    fig, ax = plt.subplots(figsize=(7, 7))
+    fig, ax = plt.subplots(figsize=(10, 10))
     ax.set_xlim((0.2, 0.8))
     ax.set_ylim((3, 16))
     ax.set_xlabel('x1: Sleeper spacing [m]')
@@ -295,14 +295,14 @@ if __name__ == '__main__':
     print()
 
     # create figure that plots all preference curves and the preference scores of the returned results of the GA
-    fig = plt.figure()
+    fig = plt.figure(figsize=(15, 5))
     ax1 = fig.add_subplot(1, 3, 1)
-    ax1.plot(c1, p1, label='Preference Function')
+    ax1.plot(c1 * 1e-3, p1, label='Preference Function')
     for i in range(len(c1_res)):
-        ax1.scatter(c1_res[i], p1_res[i], label=methods[i], marker=markers[i])
+        ax1.scatter(c1_res[i] * 1e-3, p1_res[i], label=methods[i], marker=markers[i])
     ax1.set_ylim((0, 100))
     ax1.set_title('Maintenance Costs')
-    ax1.set_xlabel('Maintenance Costs [€/y]')
+    ax1.set_xlabel(r'Maintenance Costs [€$*10^3$]')
     ax1.set_ylabel('Preference function outcome')
     ax1.grid()
     fig.legend()
@@ -331,14 +331,14 @@ if __name__ == '__main__':
     da = np.loadtxt('data/data_acceleration.txt', delimiter=',')
 
     # create figures and plot the force and acceleration data
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(projection='3d')
     ax.scatter(df[:, 0] * 0.05, df[:, 1], df[:, 2] * 1e-3)
     ax.set_xlabel('Sleeper Spacing [m]', labelpad=10)
     ax.set_ylabel('Number of Sleepers', labelpad=10)
     ax.set_zlabel('RMS Force [kN]', labelpad=10)
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(projection='3d')
     ax.scatter(da[:, 0] * 0.05, da[:, 1], da[:, 2])
     ax.set_xlabel('Sleeper Spacing [m]', labelpad=10)
