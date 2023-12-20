@@ -1,0 +1,22 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Preferendus
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Harold
+    family-names: Van Heukelum
+    email: harold.van.heukelum@boskalis.com
+    affiliation: 'Royal Boskalis, The Netherlands'
+repository-code: 'https://github.com/TUDelft-Odesys/Preferendus'
+keywords:
+  - Multi-objective optimisation
+  - Preference function modelling
+  - Decision support systems
+license: Apache-2.0
+version: 1.0.0
+date-released: '2023-12-12'

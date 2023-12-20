@@ -11,4 +11,4 @@ Please contact Harold van Heukelum at harold.van.heukelum@boskalis.nl for anythi
 # Closing remarks
 
 The use, duplication or distribution of this code is not allowed without explicit permission of
-the author. Copyright (c) Harold van Heukelum, 2022
+the author. Copyright (c) Dmitry Zhilyaev & Harold van Heukelum, 2023

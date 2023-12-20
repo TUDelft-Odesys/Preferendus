@@ -1,12 +1,14 @@
 """
 Constraint handlers for the GA
 
-(c) Harold van Heukelum, 2022
+Copyright (c) 2022. Harold Van Heukelum
 """
+import sys
+from pprint import pprint
 
 from numpy import array, zeros, multiply, ones
 
-k = 1e9
+K = 1e9
 
 
 def _static_penalty(scores, result_array):
@@ -14,9 +16,9 @@ def _static_penalty(scores, result_array):
     Static penalty handler for GA.
 
     References:
-    Morales, A. K., & Quezada, C. V. (1998, September). A universal eclectic genetic algorithm for constrained
-    optimization. In Proceedings of the 6th European congress on intelligent techniques and soft computing
-    (Vol. 1, pp. 518-522).
+    Morales, A. K., & Quezada, C. V. (1998, September). A universal eclectic genetic
+    algorithm for constrained optimization. In Proceedings of the 6th European congress
+    on intelligent techniques and soft computing (Vol. 1, pp. 518-522).
 
     :param scores: list with scores of objective evaluation
     :param result_array: list with result from calculating the constraints
@@ -24,12 +26,14 @@ def _static_penalty(scores, result_array):
     """
     scores = array(scores)
     mask_array = list()
-    mask = [False, ] * len(scores)
+    mask = [
+        False,
+    ] * len(scores)
 
     for eq, result in result_array:
-        if eq == 'ineq':
+        if eq == "ineq":
             mask_array.append(array(result) > 0)
-        elif eq == 'eq':
+        elif eq == "eq":
             mask_array.append(abs(array(result)) - 1e-4 > 0)
 
     mask_array = array(mask_array)
@@ -39,7 +43,9 @@ def _static_penalty(scores, result_array):
 
     for i in range(len(scores)):
         if mask_array[:, i].any():
-            scores[i] = k - (len(mask_array) - mask_array[:, i].sum()) * k / len(mask_array)
+            scores[i] = K - (len(mask_array) - mask_array[:, i].sum()) * K / len(
+                mask_array
+            )
 
     num_non_feasible = len(scores[mask]) if mask.any() else 0
     return scores, num_non_feasible
@@ -50,8 +56,8 @@ def _coello_non_dominance(scores, variables, result_array):
     Non-dominance constraint handler.
 
     References:
-    Coello, C. A. C. (2000). Use of a self-adaptive penalty approach for engineering optimization problems.
-    Computers in Industry, 41(2), 113-127.
+    Coello, C. A. C. (2000). Use of a self-adaptive penalty approach for engineering
+    optimization problems. Computers in Industry, 41(2), 113-127.
 
     :param scores: list with scores of objective evaluation
     :param variables: list with decoded variables
@@ -60,24 +66,28 @@ def _coello_non_dominance(scores, variables, result_array):
     """
     rank = ones(len(variables))
     mask_array = list()
-    mask = [False, ] * len(variables)
+    mask = [
+        False,
+    ] * len(variables)
     exceedance_array = list()
 
     for eq, result in result_array:
         exceedance = zeros(len(result))
-        if eq == 'ineq':
+        if eq == "ineq":
             mask = result > 0
             exceedance[mask] = result[mask]
             mask_array.append(mask)
             exceedance_array.append(exceedance)
-        elif eq == 'eq':
+        elif eq == "eq":
             mask = abs(result) - 1e-4 > 0
             exceedance[mask] = abs(result[mask])
             mask_array.append(mask)
             exceedance_array.append(exceedance)
 
     mask_array = array(mask_array)
-    violation_array = multiply(mask_array, 1).sum(axis=0)  # sum number of constraints violated
+    violation_array = multiply(mask_array, 1).sum(
+        axis=0
+    )  # sum number of constraints violated
     coefficient_array = array(exceedance_array).sum(axis=0)  # sum of violation
 
     for item in mask_array:
@@ -112,14 +122,17 @@ def _coello_non_dominance(scores, variables, result_array):
 
     rank[mask] += max(rank)
     num_non_feasible = mask.sum()
-    assert len(scores) == len(rank), 'Fitness is not calculated correctly, size does not match scores'
+    assert len(scores) == len(
+        rank
+    ), "Fitness is not calculated correctly, size does not match scores"
 
     return rank, num_non_feasible
 
 
 def _const_handler(handler, constraints, decoded, scores):
     """
-    Initial function for constraint handling. Calculate results from constraints function and call the correct handler.
+    Initial function for constraint handling. Calculate results from constraints
+    function and call the correct handler.
 
     :param handler: type of handler to use ('simple' or 'CND')
     :param constraints: list with constraints and their type (format: [[type, func]])
@@ -132,12 +145,14 @@ def _const_handler(handler, constraints, decoded, scores):
 
     result_array = list()
     for eq, func in constraints:
-        assert eq == 'eq' or eq == 'ineq', "Type of constraint should be 'eq' or 'ineq'"
-        assert (callable(func)), 'Constraint function must be callable'
+        assert eq == "eq" or eq == "ineq", "Type of constraint should be 'eq' or 'ineq'"
+        assert callable(func), "Constraint function must be callable"
         result_array.append([eq, func(decoded)])
 
-    if handler == 'CND':
-        scores, non_feasible_counter = _coello_non_dominance(scores, decoded, result_array)
+    if handler == "CND":
+        scores, non_feasible_counter = _coello_non_dominance(
+            scores, decoded, result_array
+        )
     else:
         scores, non_feasible_counter = _static_penalty(scores, result_array)
 
