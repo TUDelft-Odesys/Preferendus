@@ -2,10 +2,12 @@
 
 This repository contains the code for the Preferendus, a multi-objective design and 
 decision support optimisation tool that is part of the Open Design Systems 
-optimisation methodology. For further details, the reader is referred to: Van Heukelum, 
-Binnekamp, and Wolfert (in press). Socio-technical systems integration and design: 
-a multi-objective optimisation method based on integrative preference maximisation. 
-_Structure and Infrastructure Engineering_.
+optimisation methodology. For further details, the reader is referred to: 
+
+    H. J. van Heukelum, R. Binnekamp & A. R. M. Wolfert (16 Jan 2024): Socio-
+    technical systems integration and design: a multi-objective optimisation method based
+    on integrative preference maximisation, Structure and Infrastructure Engineering, DOI:
+    10.1080/15732479.2023.2297891
 
 # Inter-generational solver
 Part of the Preferendus is an adapted Genetic Algorithm solver that allows for proper 
